@@ -12,6 +12,7 @@ public class TaskManager : MonoBehaviour {
 
     void Start() {
         Instance = this;
+        if(tasks.Count == 0) {return;}
         foreach(Task t in tasks) {
             taskUI.text += "Task: " + t.objective + " - completed: " + t.completed + " \n";
         }
