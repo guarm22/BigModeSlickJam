@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 153224670440561782}
   - component: {fileID: 3304829239044891034}
   - component: {fileID: 3682983227509571661}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: SlickGoo
   m_TagString: Goo
   m_Icon: {fileID: 0}
