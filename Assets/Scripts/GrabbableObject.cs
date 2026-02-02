@@ -1,5 +1,9 @@
+using System.Collections.Generic;
+using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
+[RequireComponent(typeof(MeshRenderer))]
 public class GrabbableObject : MonoBehaviour {
     Rigidbody rb;
 
@@ -9,8 +13,6 @@ public class GrabbableObject : MonoBehaviour {
 
     [Header("Object Settings")]
     public float drag = 1f;
-    public float objectWeight = 1f;
-
     private bool slippery = false;
     
 
@@ -21,13 +23,42 @@ public class GrabbableObject : MonoBehaviour {
     }
 
     public void PullTowardsPlayer(Vector3 playerPosition, float force = 0.2f) {
-        Vector3 direction = (playerPosition - transform.position).normalized;
-        rb.AddForce(direction * force * (1/objectWeight) * Time.deltaTime * 350f, ForceMode.Impulse);
+        Vector3 toTarget = playerPosition - transform.position;
+        float distance = toTarget.magnitude;
+        // Tunables
+        float slowRadius = 1f;
+        float stopRadius = 0.05f;
 
-        //if the object is close enough to the point, do not apply force and "snap" it to the point
-        if(Vector3.Distance(transform.position, playerPosition) < 0.2f) {
-            rb.linearVelocity = Vector3.zero;
+        Vector3 desiredVelocity;
+        if (distance < stopRadius){
+            desiredVelocity = Vector3.zero;
         }
+        else {
+            float speed = objectMaxSpeed;
+            if (distance < slowRadius) {
+                speed = objectMaxSpeed * (distance / slowRadius);
+            }
+            desiredVelocity = toTarget.normalized * speed;
+        }
+
+        // Difference between current and desired velocity
+        Vector3 steering = desiredVelocity - rb.linearVelocity;
+
+
+        rb.AddForce(steering * force * 50f, ForceMode.Acceleration);
+
+        //MAKE OBJECT MORE STABLE WHEN AT PLAYERS HAND
+        if(Vector3.Distance(this.transform.position, playerPosition) < 1.5f) {
+            rb.linearDamping = 8f;
+        }
+        else {
+            rb.linearDamping = 0f;
+        }
+    }
+
+    public void LetGo()
+    {
+        rb.linearDamping = 0f;
     }
 
     void FixedUpdate() {
@@ -42,15 +73,26 @@ public class GrabbableObject : MonoBehaviour {
         }
     }
 
-    public void ActivateSlickGoo() {
+    public void ActivateSlickGoo(Material gooMat) {
         if(slippery) {return;}
 
-        grabForce = grabForce + 1f;
-        objectMaxSpeed = objectMaxSpeed + 10f;
+        Material[] currentMats = GetComponent<MeshRenderer>().materials;
+        currentMats = currentMats.Append(gooMat).ToArray();
+        GetComponent<MeshRenderer>().materials = currentMats;
+
+        grabForce = grabForce + 0.1f;
+        objectMaxSpeed = objectMaxSpeed + 8f;
         slippery = true;
     }
     public void ExitSlickGoo() {
-        grabForce = grabForce - 1f;
-        objectMaxSpeed = objectMaxSpeed - 10f;
+        if(!slippery) {return; }
+
+        Material[] currentMats = GetComponent<MeshRenderer>().materials;
+        currentMats = currentMats.SkipLast(1).ToArray();
+        GetComponent<MeshRenderer>().materials=currentMats;
+        
+        grabForce = grabForce - 0.1f;
+        objectMaxSpeed = objectMaxSpeed - 8f;
+        slippery = false;
     }
 }
