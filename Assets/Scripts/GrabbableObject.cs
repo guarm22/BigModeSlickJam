@@ -25,7 +25,7 @@ public class GrabbableObject : MonoBehaviour {
         Vector3 toTarget = playerPosition - transform.position;
         float distance = toTarget.magnitude;
         // Tunables
-        float slowRadius = 1f;
+        float slowRadius = 0.5f;
         float stopRadius = 0.05f;
 
         Vector3 desiredVelocity;
