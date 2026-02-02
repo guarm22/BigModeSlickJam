@@ -11,9 +11,10 @@ public class SlickGoo : MonoBehaviour {
     private float elapsedTime = 0f;
     private bool exitedGoo = false;
 
+    public Material gooMat;
+
     void Awake() {
-        if(player == null)
-        {
+        if(player == null) {
             player = GameObject.Find("PlayerBody").transform;
         }
         gooDuration = 1.5f;   
@@ -34,7 +35,7 @@ public class SlickGoo : MonoBehaviour {
         if(other.tag == "Grabbable"){
             GrabbableObject grabbable = other.GetComponentInParent<GrabbableObject>();
             if(grabbable != null) {
-                grabbable.ActivateSlickGoo();
+                grabbable.ActivateSlickGoo(gooMat);
             }
         }
     }

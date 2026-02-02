@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class WaterBall : MonoBehaviour {
@@ -6,13 +7,26 @@ public class WaterBall : MonoBehaviour {
     private float speed;
 
     void OnCollisionEnter(Collision collision) {
-        if(collision.gameObject.tag == "Goo") {
-            collision.gameObject.GetComponent<SlickGoo>().DestroyGooPool();
-        }
-        if (collision.gameObject.tag == "Player")
-        {
+        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Ball") {
             return;
         }
+        if(collision.gameObject.tag == "Grabbable") {
+            collision.gameObject.GetComponent<GrabbableObject>().ExitSlickGoo();
+        }
+
+        StartCoroutine(DestroyAfterDelay(0.05f));
+    }
+
+    void OnTriggerEnter(Collider other) {
+        if(other.gameObject.tag == "Goo") {
+            other.gameObject.GetComponent<SlickGoo>().DestroyGooPool();
+            StartCoroutine(DestroyAfterDelay(0.05f));
+        }
+    }
+
+    private IEnumerator DestroyAfterDelay(float delay) {
+        this.GetComponent<MeshRenderer>().enabled = false;
+        yield return new WaitForSeconds(delay);
         Destroy(this.gameObject);
     }
 

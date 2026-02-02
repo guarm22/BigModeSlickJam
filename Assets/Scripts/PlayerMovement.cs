@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour {
     [Header("Movement")]
     public float maxSpeed = 7f;
-    public float sprintMultiplier = 1.2f;
     public float groundDrag = 5f;
     public float speedLimit = 60f;
     [HideInInspector]
@@ -65,9 +65,7 @@ public class PlayerMovement : MonoBehaviour {
 
         //RESET TO SPAWNPOINT
         if(Input.GetKeyDown(KeyCode.R)) {
-            transform.position = spawnPoint;
-            rb.linearVelocity = Vector3.zero;
-            maxSpeed = defaultMaxSpeed;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
         //TONGUE SHOOT PULL --- While mouse0 is down and there is a hit point, pull player towards it
@@ -88,7 +86,8 @@ public class PlayerMovement : MonoBehaviour {
 
     void Update() {
         //ground check
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight*0.5f + 0.2f, groundLayer);
+        Vector3 halfExtents = new Vector3(0.5f, 0.5f, 0.5f);
+        grounded = Physics.BoxCast(transform.position, halfExtents, Vector3.down, Quaternion.identity, 0.8f, groundLayer);
         GetInput();
         SpeedControl();
         SlickGooCheck();

@@ -68,13 +68,15 @@ public class TongueShoot : MonoBehaviour {
         //adasda test
         CrosshairControl();
 
+        if(Input.GetKeyUp(KeyCode.Mouse0) && grabbedObject != null) {
+            grabbedObject.GetComponent<GrabbableObject>().LetGo();
+            grabbedObject = null;
+            return;
+        }
+
         if(Input.GetKey(KeyCode.Mouse0) && grabbedObject != null) {
             playerHandPos = player.gameObject.GetComponentInParent<PlayerMovement>().handPosition;
             grabbedObject.GetComponent<GrabbableObject>().PullTowardsPlayer(playerHandPos, grabbedObject.grabForce);
-
-            if(Input.GetKeyUp(KeyCode.Mouse0)) {
-                grabbedObject = null;
-            }
             return;
         }
 

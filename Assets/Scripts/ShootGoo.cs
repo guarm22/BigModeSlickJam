@@ -9,6 +9,9 @@ public class ShootGoo : MonoBehaviour {
 
     [Header("Player Info")]
     public Transform playerBody;
+
+    private float waterCd = 0.05f;
+    private float elapsedTime = 0;
     
     void Start() {
         
@@ -18,7 +21,8 @@ public class ShootGoo : MonoBehaviour {
         if(Input.GetKeyDown(KeyCode.Q)) {
             Shoot();
         }
-        if(Input.GetKeyDown(KeyCode.F)){ ShootWater(); }
+        if(Input.GetKey(KeyCode.F) && elapsedTime > waterCd){ ShootWater(); elapsedTime=0;}
+        elapsedTime += Time.deltaTime;
     }
 
     private void ShootWater()
