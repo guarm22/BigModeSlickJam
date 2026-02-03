@@ -57,8 +57,12 @@ public class GrabbableObject : MonoBehaviour {
         }
     }
 
-    public void LetGo()
-    {
+    public void ShootAwayFromPlayer(Vector3 playerPos, float force=300f) {
+        Vector3 toTarget = playerPos - transform.position;
+        rb.AddForce(-toTarget * force, ForceMode.Force);
+    }
+
+    public void LetGo() {
         rb.linearDamping = 0f;
     }
 

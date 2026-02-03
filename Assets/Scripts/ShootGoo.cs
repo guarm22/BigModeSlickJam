@@ -21,12 +21,11 @@ public class ShootGoo : MonoBehaviour {
         if(Input.GetKeyDown(KeyCode.Q)) {
             Shoot();
         }
-        if(Input.GetKey(KeyCode.F) && elapsedTime > waterCd){ ShootWater(); elapsedTime=0;}
+        if(Input.GetKey(KeyCode.Mouse1) && elapsedTime > waterCd){ ShootWater(); elapsedTime=0;}
         elapsedTime += Time.deltaTime;
     }
 
-    private void ShootWater()
-    {
+    private void ShootWater(){
         Vector3 spawnPos = FP_CameraControl.pointInFrontOfCamera(1.2f);
         Vector3 currentDirection = FP_CameraControl.cameraFacingDirection();
         Vector3 moveDirection = currentDirection;
