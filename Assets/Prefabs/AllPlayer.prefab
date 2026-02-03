@@ -485,7 +485,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e785183da944fd9489593fff06a23258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FPS_PlayerMovement
-  maxSpeed: 7
+  maxSpeed: 5.5
   groundDrag: 1.5
   speedLimit: 60
   defaultMaxSpeed: 7
@@ -521,6 +521,7 @@ MonoBehaviour:
   cooldown: 0.5
   range: 50
   hitPoint: {x: 0, y: 0, z: 0}
+  grabbedObject: {fileID: 0}
 --- !u!114 &6536443806871628695
 MonoBehaviour:
   m_ObjectHideFlags: 0

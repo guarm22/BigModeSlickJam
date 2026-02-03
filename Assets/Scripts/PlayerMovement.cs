@@ -5,11 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour {
     [Header("Movement")]
-    public float maxSpeed = 7f;
+    public float maxSpeed = 5.5f;
     public float groundDrag = 5f;
     public float speedLimit = 60f;
     [HideInInspector]
-    public float defaultMaxSpeed = 7f;
+    private float defaultMaxSpeed = 5.5f;
 
 
     [Header("Ground Check")]
@@ -45,7 +45,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private List<string> activeGooZones = new List<string>();
 
-    private float usualSpeedMult = 7f;
+    private float usualSpeedMult = 5.5f;
 
 
     private bool crouching = false;
@@ -109,7 +109,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private void Crouch() {
         Vector3 uncrouched = new Vector3(1, 1, 1);
-        Vector3 crouched = new Vector3(0.65f, 0.65f, 0.65f);
+        Vector3 crouched = new Vector3(0.5f, 0.5f, 0.5f);
 
         //no crouching in the air
         if(Input.GetKey(KeyCode.LeftControl) && !grounded && !crouching) {
@@ -136,6 +136,8 @@ public class PlayerMovement : MonoBehaviour {
         SpeedControl();
         SlickGooCheck();
         Crouch();
+        Debug.Log("maxspeed: " + maxSpeed);
+        Debug.Log("defspeed: " + defaultMaxSpeed);
         if(grounded) {
             pounding = false;
 
