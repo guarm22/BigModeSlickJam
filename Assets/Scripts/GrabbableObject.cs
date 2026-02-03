@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(MeshRenderer))]
 public class GrabbableObject : MonoBehaviour {
     Rigidbody rb;
 
@@ -16,6 +15,9 @@ public class GrabbableObject : MonoBehaviour {
     
 
     void Start() {
+        if(GetComponent<Rigidbody>() == null) {
+            this.gameObject.AddComponent<Rigidbody>();
+        }
         rb = GetComponent<Rigidbody>();
         rb.linearDamping = drag;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
@@ -55,8 +57,12 @@ public class GrabbableObject : MonoBehaviour {
         }
     }
 
-    public void LetGo()
-    {
+    public void ShootAwayFromPlayer(Vector3 playerPos, float force=300f) {
+        Vector3 toTarget = playerPos - transform.position;
+        rb.AddForce(-toTarget * force, ForceMode.Force);
+    }
+
+    public void LetGo() {
         rb.linearDamping = 0f;
     }
 

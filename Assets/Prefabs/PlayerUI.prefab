@@ -1146,14 +1146,18 @@ MonoBehaviour:
 
     R - Reset
 
-    RClick - Pound
+    Z - Pound
 
     X - Rotate 180
 
     Q
     - GOO
 
-    F - Water'
+    RClick - Water
+
+    LCtrl - Slide
+
+    F (Hold OBJ) - Throw'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

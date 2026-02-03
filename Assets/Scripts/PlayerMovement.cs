@@ -45,6 +45,11 @@ public class PlayerMovement : MonoBehaviour {
 
     private List<string> activeGooZones = new List<string>();
 
+    private float usualSpeedMult = 7f;
+
+
+    private bool crouching = false;
+
      void Awake() {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
@@ -52,17 +57,29 @@ public class PlayerMovement : MonoBehaviour {
         spawnPoint = transform.position;
         defaultDrag = groundDrag;
     }
+
+    //step 1. CHECK IF PLAYER IS GRAPPLED
+    //STEP 2. IF YES, GET THE POINT THE PLAYER IS GRAPPLED TO
+    //STEP 3. APPLY FORCE TO PLAYER FROM THAT POINT WHEN THEY JUMP
   
     private void GetInput() {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
         if(Input.GetKey(jumpKey) && readyToJump && grounded) {
+            RaycastHit hit;
+            Vector3 halfExtents = new Vector3(0.5f, 0.5f, 0.5f);
+            grounded = Physics.BoxCast(transform.position, halfExtents, Vector3.down, out hit, Quaternion.identity, 0.8f, groundLayer);
+            if(hit.collider){
+                if(hit.collider.gameObject.tag == "Grabbable" && TongueShoot.Instance.grabbedObject != null) {
+                return;
+                }
+            }
+
             readyToJump = false;
             Jump();
             Invoke(nameof(ResetJump), jumpCd); //TODO - if pausing is added, must change this
         }
-
         //RESET TO SPAWNPOINT
         if(Input.GetKeyDown(KeyCode.R)) {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -78,7 +95,7 @@ public class PlayerMovement : MonoBehaviour {
             BeingPulled = false;
         }
 
-        if(Input.GetKey(KeyCode.Mouse1) && !grounded) {
+        if(Input.GetKey(KeyCode.Z) && !grounded) {
             pounding = true;
         }
         
@@ -90,6 +107,27 @@ public class PlayerMovement : MonoBehaviour {
         }
     }
 
+    private void Crouch() {
+        Vector3 uncrouched = new Vector3(1, 1, 1);
+        Vector3 crouched = new Vector3(0.65f, 0.65f, 0.65f);
+
+        //no crouching in the air
+        if(Input.GetKey(KeyCode.LeftControl) && !grounded && !crouching) {
+            Debug.Log("In the air and not crouching");
+            crouching = true;
+            return;
+        }
+
+        if((Input.GetKey(KeyCode.LeftControl) && !crouching) || (grounded && Input.GetKey(KeyCode.LeftControl) && crouching && this.transform.localScale != crouched)) {
+            this.transform.localScale = crouched;
+            crouching = true;
+        }
+        if(Input.GetKeyUp(KeyCode.LeftControl) && crouching) {
+            this.transform.localScale = uncrouched;
+            crouching = false;
+        }
+    }
+
     void Update() {
         //ground check
         Vector3 halfExtents = new Vector3(0.5f, 0.5f, 0.5f);
@@ -97,9 +135,18 @@ public class PlayerMovement : MonoBehaviour {
         GetInput();
         SpeedControl();
         SlickGooCheck();
+        Crouch();
         if(grounded) {
             pounding = false;
-            maxSpeed = defaultMaxSpeed;
+
+            if(crouching) {
+                if(defaultMaxSpeed > maxSpeed) {
+                    maxSpeed = defaultMaxSpeed;
+                }
+            }
+            else{
+                maxSpeed = defaultMaxSpeed;
+            }
         }
         else{ rb.linearDamping = 0;}
 
@@ -122,12 +169,14 @@ public class PlayerMovement : MonoBehaviour {
 
     private void MovePlayer() {
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+        float crouchedMult = crouching ? 0.08f : 1.0f;
+        float trueDefaultMaxSpeed = crouching ? usualSpeedMult : maxSpeed;
 
         if(grounded) {
-            rb.AddForce(moveDirection.normalized * maxSpeed * 10f, ForceMode.Force);
+            rb.AddForce(moveDirection.normalized * crouchedMult *  trueDefaultMaxSpeed * 10f, ForceMode.Force);
         }
         else if(!grounded) {
-            rb.AddForce(moveDirection.normalized * maxSpeed * 10f * airMultiplier, ForceMode.Force);
+            rb.AddForce(moveDirection.normalized * trueDefaultMaxSpeed * 10f * airMultiplier, ForceMode.Force);
         }
     }
 
@@ -150,20 +199,20 @@ public class PlayerMovement : MonoBehaviour {
 
     public void ActivateSlickGoo(SlickGoo slickGoo) {
         activeGooZones.Add(slickGoo.name);
-        defaultMaxSpeed = defaultMaxSpeed + 7f;
+        defaultMaxSpeed = defaultMaxSpeed + usualSpeedMult;
     }
     public void ExitSlickGoo(SlickGoo slickGoo) {
         activeGooZones.Remove(slickGoo.name);
-        if(!grounded) {
+        if(!grounded || crouching) {
             StartCoroutine(DelayedSpeedReduction(7f));
             return;
         }
-        defaultMaxSpeed = defaultMaxSpeed - 7f;
+        defaultMaxSpeed = defaultMaxSpeed - usualSpeedMult;
     }
 
     private IEnumerator DelayedSpeedReduction(float amount) {
         //wait until grounnded
-        while(!grounded) {
+        while(!grounded || crouching) {
             yield return null;
         }
         defaultMaxSpeed = defaultMaxSpeed - amount;

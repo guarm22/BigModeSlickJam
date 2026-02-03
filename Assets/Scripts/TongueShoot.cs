@@ -22,7 +22,7 @@ public class TongueShoot : MonoBehaviour {
     public static TongueShoot Instance;
 
     [HideInInspector]
-    private GrabbableObject grabbedObject;
+    public GrabbableObject grabbedObject;
     private Color green = Color.green;
     private Color red = Color.red;
 
@@ -75,6 +75,13 @@ public class TongueShoot : MonoBehaviour {
         }
 
         if(Input.GetKey(KeyCode.Mouse0) && grabbedObject != null) {
+            if(Input.GetKey(KeyCode.F)) {
+                grabbedObject.GetComponent<GrabbableObject>().LetGo();
+                grabbedObject.GetComponent<GrabbableObject>().ShootAwayFromPlayer(player.transform.position);
+                grabbedObject = null;
+                return;
+            }
+
             playerHandPos = player.gameObject.GetComponentInParent<PlayerMovement>().handPosition;
             grabbedObject.GetComponent<GrabbableObject>().PullTowardsPlayer(playerHandPos, grabbedObject.grabForce);
             return;
