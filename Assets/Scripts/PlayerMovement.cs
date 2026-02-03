@@ -52,6 +52,10 @@ public class PlayerMovement : MonoBehaviour {
         spawnPoint = transform.position;
         defaultDrag = groundDrag;
     }
+
+    //step 1. CHECK IF PLAYER IS GRAPPLED
+    //STEP 2. IF YES, GET THE POINT THE PLAYER IS GRAPPLED TO
+    //STEP 3. APPLY FORCE TO PLAYER FROM THAT POINT WHEN THEY JUMP
   
     private void GetInput() {
         horizontalInput = Input.GetAxisRaw("Horizontal");
