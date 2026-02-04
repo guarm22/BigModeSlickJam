@@ -136,8 +136,6 @@ public class PlayerMovement : MonoBehaviour {
         SpeedControl();
         SlickGooCheck();
         Crouch();
-        Debug.Log("maxspeed: " + maxSpeed);
-        Debug.Log("defspeed: " + defaultMaxSpeed);
         if(grounded) {
             pounding = false;
 
@@ -206,7 +204,7 @@ public class PlayerMovement : MonoBehaviour {
     public void ExitSlickGoo(SlickGoo slickGoo) {
         activeGooZones.Remove(slickGoo.name);
         if(!grounded || crouching) {
-            StartCoroutine(DelayedSpeedReduction(7f));
+            StartCoroutine(DelayedSpeedReduction(usualSpeedMult));
             return;
         }
         defaultMaxSpeed = defaultMaxSpeed - usualSpeedMult;
