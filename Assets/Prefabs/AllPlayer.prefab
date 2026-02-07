@@ -485,10 +485,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e785183da944fd9489593fff06a23258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FPS_PlayerMovement
-  maxSpeed: 5.5
+  maxSpeed: 3
   groundDrag: 1.5
-  speedLimit: 60
-  defaultMaxSpeed: 7
+  speedLimit: 20
   playerHeight: 2
   groundLayer:
     serializedVersion: 2

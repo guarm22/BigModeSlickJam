@@ -4,9 +4,9 @@ using UnityEngine;
 public class ObjectTask : Task {
     public List<GameObject> requiredObjects;
 
-    [HideInInspector]
-    public bool complete;
     private List<GameObject> objectsInArea = new List<GameObject>();
+
+    public bool ShouldObjectiveFailIfObjectsAreRemoved = false;
 
     void OnTriggerEnter(Collider other)
     {
@@ -25,9 +25,14 @@ public class ObjectTask : Task {
 
     void Update() {
         if(objectsInArea.Count == requiredObjects.Count) {
-            if(complete == false)
-            {
-                this.complete = true;
+            if(completed == false) {
+                completed = true;
+                TaskManager.Instance.UpdateTasks(this);
+            }
+        }
+        else if(ShouldObjectiveFailIfObjectsAreRemoved == true){
+            if(completed) {
+                completed = false;
                 TaskManager.Instance.UpdateTasks(this);
             }
         }

@@ -32,8 +32,8 @@ public class TaskManager : MonoBehaviour {
     public void UpdateTasks(Task updatedTask){
         taskUI.text = ""; 
         float completedCount = 0;
+
         foreach(Task t in tasks) {
-            if(t == updatedTask) { Debug.Log(t.gameObject.name); t.completed = updatedTask.completed;}
             if(t.completed) { completedCount += 1;}
             taskUI.text += "Task: " + t.objective + " - completed: " + t.completed + " \n";
         }

@@ -5,11 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour {
     [Header("Movement")]
-    public float maxSpeed = 5.5f;
+    public float maxSpeed = 3f;
     public float groundDrag = 5f;
     public float speedLimit = 60f;
     [HideInInspector]
-    private float defaultMaxSpeed = 5.5f;
+    private float defaultMaxSpeed = 3f;
 
 
     [Header("Ground Check")]
@@ -45,7 +45,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private List<string> activeGooZones = new List<string>();
 
-    private float usualSpeedMult = 5.5f;
+    private float usualSpeedMult = 3f;
 
 
     private bool crouching = false;
