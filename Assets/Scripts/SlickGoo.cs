@@ -11,11 +11,17 @@ public class SlickGoo : MonoBehaviour {
     private float elapsedTime = 0f;
     private bool exitedGoo = false;
 
+    public bool beingDestroyed = false;
+
     public Material gooMat;
 
     void Awake() {
         if(player == null) {
             player = GameObject.Find("PlayerBody").transform;
+        }
+        if(CleanlinessTask.Instance != null)
+        {
+            CleanlinessTask.Instance.gooSlicks += 1;
         }
         gooDuration = 1.5f;   
     }
@@ -61,6 +67,9 @@ public class SlickGoo : MonoBehaviour {
     }
 
     public void DestroyGooPool() {
+        if(beingDestroyed) {return;}
+        CleanlinessTask.Instance.gooSlicks -= 1;
+        beingDestroyed = true;
         if(!activated) {
             Destroy(this.gameObject);
         }

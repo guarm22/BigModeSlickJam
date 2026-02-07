@@ -17,27 +17,32 @@ public class TaskManager : MonoBehaviour {
         List<Task> allTasks = GameObject.FindObjectsByType<Task>(FindObjectsSortMode.None).ToList<Task>();
         
         taskUI.text = ""; 
-        float completedCount = 0;
         if(tasks.Count == 0) {return;}
         foreach(Task t in allTasks) {
             if(!tasks.Contains(t)) {tasks.Add(t);}
-            if(t.completed) { completedCount += 1;}
 
             taskUI.text += "Task: " + t.objective + " - completed: " + t.completed + " \n";
         }
-        taskUI.text+="Completion Rate: " + ((completedCount/tasks.Count)*100).ToString("F1");
+        taskUI.text+="Completion Rate: " + CalculateCompletionPercent().ToString("F1");
 
+    }
+
+    private float CalculateCompletionPercent() {
+        float completedCount = 0f;
+        foreach(Task t in tasks) {
+            if(t.completed) { completedCount += 1;}
+        }
+
+        return Math.Clamp(((completedCount/(tasks.Count-1))*100) - CleanlinessTask.Instance.GetRemovedPercent(), 0, 100);
     }
 
     public void UpdateTasks(Task updatedTask){
         taskUI.text = ""; 
-        float completedCount = 0;
 
         foreach(Task t in tasks) {
-            if(t.completed) { completedCount += 1;}
             taskUI.text += "Task: " + t.objective + " - completed: " + t.completed + " \n";
         }
-        taskUI.text+="Completion Rate: " + ((completedCount/tasks.Count)*100).ToString("F1");
+        taskUI.text+="Completion Rate: " + CalculateCompletionPercent().ToString("F1");;
     }
 
 
