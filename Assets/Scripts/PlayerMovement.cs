@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour {
     public float groundDrag = 5f;
     public float speedLimit = 60f;
     [HideInInspector]
-    private float defaultMaxSpeed = 3f;
+    private float defaultMaxSpeed = 4.5f;
 
 
     [Header("Ground Check")]
@@ -45,7 +45,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private List<string> activeGooZones = new List<string>();
 
-    private float usualSpeedMult = 3f;
+    private float usualSpeedMult = 2.5f;
 
 
     private bool crouching = false;

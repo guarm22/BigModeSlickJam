@@ -7,8 +7,10 @@ public class CleanGooTask : Task {
     Material gooMat;
 
     public int waterHitsRequired = 50;
+    private float waterHitsStart;
 
     void Start() {
+        waterHitsStart = waterHitsRequired;
         mr = GetComponent<MeshRenderer>();
         if(gooMat == null) {
             gooMat = Resources.Load<Material>("Gooey");
@@ -21,10 +23,15 @@ public class CleanGooTask : Task {
     }
 
     void OnCollisionEnter(Collision collision) {
-      if(collision.gameObject.name.Contains("WaterBall")) {
-            waterHitsRequired = waterHitsRequired - 1;
+      if(collision.gameObject.name.Contains("WaterBall") && !completed) {
 
-            if(waterHitsRequired == 0) {
+            Material[] currentMatsA = mr.materials;
+            waterHitsRequired = waterHitsRequired - 1;
+            float alphaPercent = 2.5f * (waterHitsRequired / waterHitsStart);
+            currentMatsA[1].color = new Color(currentMatsA[1].color.r, currentMatsA[1].color.g, currentMatsA[1].color.b, currentMatsA[1].color.r * alphaPercent);
+            mr.materials = currentMatsA;
+
+            if(waterHitsRequired <= 0) {
                 completed = true;
                 TaskManager.Instance.UpdateTasks(this);
 
