@@ -5,11 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour {
     [Header("Movement")]
-    public float maxSpeed = 7f;
+    public float maxSpeed = 3f;
     public float groundDrag = 5f;
     public float speedLimit = 60f;
     [HideInInspector]
-    public float defaultMaxSpeed = 7f;
+    private float defaultMaxSpeed = 3f;
 
 
     [Header("Ground Check")]
@@ -45,7 +45,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private List<string> activeGooZones = new List<string>();
 
-    private float usualSpeedMult = 7f;
+    private float usualSpeedMult = 3f;
 
 
     private bool crouching = false;
@@ -109,7 +109,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private void Crouch() {
         Vector3 uncrouched = new Vector3(1, 1, 1);
-        Vector3 crouched = new Vector3(0.65f, 0.65f, 0.65f);
+        Vector3 crouched = new Vector3(0.5f, 0.5f, 0.5f);
 
         //no crouching in the air
         if(Input.GetKey(KeyCode.LeftControl) && !grounded && !crouching) {
@@ -204,7 +204,7 @@ public class PlayerMovement : MonoBehaviour {
     public void ExitSlickGoo(SlickGoo slickGoo) {
         activeGooZones.Remove(slickGoo.name);
         if(!grounded || crouching) {
-            StartCoroutine(DelayedSpeedReduction(7f));
+            StartCoroutine(DelayedSpeedReduction(usualSpeedMult));
             return;
         }
         defaultMaxSpeed = defaultMaxSpeed - usualSpeedMult;

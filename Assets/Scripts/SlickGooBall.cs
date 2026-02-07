@@ -6,17 +6,25 @@ public class SlickGooBall : MonoBehaviour {
     public bool activated = false;
     private Vector3 direction;
     private float speed;
-    private void spawnGooPool() {
+    private void spawnGooPool(float angle) {
         Vector3 vec = Camera.main.transform.rotation.eulerAngles;
-        Instantiate(SlickGoo, this.transform.position - new Vector3(0, 0.08f, 0), Quaternion.Euler(0, vec.y, 0));
+        Instantiate(SlickGoo, this.transform.position - new Vector3(0, 0.08f, 0), Quaternion.Euler(-90 + angle, vec.y, 0));
         Destroy(this.gameObject);
     }
 
 
     void OnCollisionEnter(Collision collision) {
         if(LayerMask.LayerToName(collision.gameObject.layer) == "Ground") {
+            Vector3 surfaceNormal = collision.contacts[0].normal;
+            Vector3 incomingVelocity = this.GetComponent<Rigidbody>().linearVelocity;
+
+            float angleOfImpact = Vector3.Angle(incomingVelocity, -surfaceNormal);
+            float angleOfSurfaceToWorldUp = Vector3.Angle(surfaceNormal, Vector3.up);
+
+            Debug.Log(angleOfSurfaceToWorldUp);
+
             if(collision.gameObject.tag != "StaticObjects") {return;}
-            spawnGooPool();
+            spawnGooPool(angleOfSurfaceToWorldUp);
         }
     }
 
