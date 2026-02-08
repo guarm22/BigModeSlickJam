@@ -155,3 +155,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SlickGooBall
   SlickGoo: {fileID: 7498969964156889164, guid: ceadf02f4f1375d48aca4e84e818847e, type: 3}
   activated: 0
+  spawnSound: {fileID: 8300000, guid: ef57736d084b8b54981ef66a00dde52f, type: 3}

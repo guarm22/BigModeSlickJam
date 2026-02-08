@@ -32,7 +32,7 @@ public class CleanGooTask : Task {
             mr.materials = currentMatsA;
 
             if(waterHitsRequired <= 0) {
-                completed = true;
+                CompleteTask();
                 TaskManager.Instance.UpdateTasks(this);
 
                 Material[] currentMats = mr.materials;

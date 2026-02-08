@@ -7,11 +7,13 @@ public class SlickGooBall : MonoBehaviour {
     public bool activated = false;
     private Vector3 direction;
     private float speed;
+    public AudioClip spawnSound;
+
     private void spawnGooPool(float angleOfSurface, float wallAngle) {
         Vector3 vec = Camera.main.transform.rotation.eulerAngles;
         double target = 90;
         double result = Math.Round(vec.y / target) * target;
-
+        AudioSource.PlayClipAtPoint(spawnSound, this.transform.position);
         Instantiate(SlickGoo, this.transform.position - new Vector3(0, 0.08f, 0), Quaternion.Euler(-90 + angleOfSurface, wallAngle, 0));
         Destroy(this.gameObject);
     }

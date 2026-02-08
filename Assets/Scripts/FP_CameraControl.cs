@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class FP_CameraControl : MonoBehaviour
 {
-    public float sensX = 400;
-    public float sensY = 400;
+    public float sens;
 
     public Transform orientation;
 
@@ -17,11 +16,13 @@ public class FP_CameraControl : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         Camera.main.fieldOfView = FOV;
+        sens = PlayerPrefs.GetFloat("Sens");
     }
 
     void Update() {
-        float mouseX = Input.GetAxis("Mouse X") * sensX * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * sensY * Time.deltaTime;
+        if(PlayerUI.instance.paused) {return;}
+        float mouseX = Input.GetAxis("Mouse X") * sens * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * sens * Time.deltaTime;
 
         yRotation += mouseX;
 
@@ -37,12 +38,12 @@ public class FP_CameraControl : MonoBehaviour
         }
 
         if(Input.GetKeyDown(KeyCode.PageUp)) {
-           sensX += 50;
-           sensY += 50;
+           sens += 50;
+           PlayerPrefs.SetFloat("Sens", sens);
         }
         if(Input.GetKeyDown(KeyCode.PageDown)) {
-           sensX -= 50;
-           sensY -= 50;
+           sens -= 50;
+           PlayerPrefs.SetFloat("Sens", sens);
         }
         
     }

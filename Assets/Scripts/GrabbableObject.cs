@@ -6,8 +6,8 @@ public class GrabbableObject : MonoBehaviour {
     Rigidbody rb;
 
     [Header("Grab Settings")]
-    public float grabForce = 0.5f;
-    public float objectMaxSpeed = 20f;
+    public float grabForce = 0.1f;
+    public float objectMaxSpeed = 7f;
 
     [Header("Object Settings")]
     public float drag = 1f;

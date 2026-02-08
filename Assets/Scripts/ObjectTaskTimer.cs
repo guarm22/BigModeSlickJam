@@ -37,14 +37,14 @@ public class ObjectTaskTimer : Task {
             elapsedTime += Time.deltaTime;
 
             if(elapsedTime >= maxTimeBeforeFail && completed) {
-                completed = false;
+                FailTask();
                 permaFail = true;
                 TaskManager.Instance.UpdateTasks(this);
                 return;
             }
 
             if(completed == false && elapsedTime >= minTimeRequired) {
-                completed = true;
+                CompleteTask();
                 TaskManager.Instance.UpdateTasks(this);
             }
         }

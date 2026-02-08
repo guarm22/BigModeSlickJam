@@ -6,7 +6,7 @@ public class CleanlinessTask : Task {
     public int gooSlicks;
     private int lastFrame = 0;
 
-    void Start() {
+    void Awake() {
         Instance = this;
         gooSlicks = 0;
         this.objective = "Keep the house clean of all goo! (-" +  gooSlicks + "%)"; 
@@ -21,8 +21,7 @@ public class CleanlinessTask : Task {
         lastFrame = gooSlicks;
     }
 
-    public float GetRemovedPercent()
-    {
+    public float GetRemovedPercent() {
         return gooSlicks;
     }
 }

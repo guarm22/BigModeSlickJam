@@ -50,12 +50,23 @@ public class PlayerMovement : MonoBehaviour {
 
     private bool crouching = false;
 
+    public List<AudioClip> jumpSounds = new List<AudioClip>();
+    public AudioSource audioSource;
+
      void Awake() {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         readyToJump = true;
         spawnPoint = transform.position;
         defaultDrag = groundDrag;
+        if(audioSource == null)
+        {
+            audioSource = this.gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+            audioSource.loop = false;
+            audioSource.clip = jumpSounds[0];
+            audioSource.volume= 0.5f;
+        }
     }
 
     //step 1. CHECK IF PLAYER IS GRAPPLED
@@ -99,10 +110,10 @@ public class PlayerMovement : MonoBehaviour {
             pounding = true;
         }
         
-        if(Input.GetKeyDown(KeyCode.Alpha1)) {
+        if(Input.GetKeyDown(KeyCode.F6)) {
             SceneManager.LoadScene(0);
         }
-        if(Input.GetKeyDown(KeyCode.Alpha2)) {
+        if(Input.GetKeyDown(KeyCode.F7)) {
             SceneManager.LoadScene(1);
         }
     }
@@ -129,6 +140,7 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     void Update() {
+        if(PlayerUI.instance.paused) {return;}
         //ground check
         Vector3 halfExtents = new Vector3(0.5f, 0.5f, 0.5f);
         grounded = Physics.BoxCast(transform.position, halfExtents, Vector3.down, Quaternion.identity, 0.8f, groundLayer);
@@ -157,6 +169,7 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void FixedUpdate() {
+        if(PlayerUI.instance.paused) {return;}
         MovePlayer();
         if (BeingPulled) {
             PullPlayerTowardsPoint(TongueShoot.Instance.hitPoint, 2f);
@@ -191,6 +204,8 @@ public class PlayerMovement : MonoBehaviour {
     private void Jump() {
         rb.linearVelocity = new (rb.linearVelocity.x, 0f, rb.linearVelocity.z);
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        
+        audioSource.PlayOneShot(jumpSounds[Random.Range(0, jumpSounds.Count)]);
     }
 
     private void ResetJump() {

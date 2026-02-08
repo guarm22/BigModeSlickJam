@@ -4190,6 +4190,10 @@ PrefabInstance:
       propertyPath: crosshair
       value: 
       objectReference: {fileID: 589936219}
+    - target: {fileID: 8289742905611408872, guid: 28eb1fbaaf60d6d409309d41f07d1b6f, type: 3}
+      propertyPath: m_Volume
+      value: 0.299
+      objectReference: {fileID: 0}
     - target: {fileID: 8942584728617959867, guid: 28eb1fbaaf60d6d409309d41f07d1b6f, type: 3}
       propertyPath: m_Name
       value: AllPlayer

@@ -154,3 +154,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaterBall
   activated: 0
+  waterHits:
+  - {fileID: 8300000, guid: ee3966ef5d547c14f98d46b51758fcfb, type: 3}
+  - {fileID: 8300000, guid: c383d180501ebc6489e04d8f88a30d13, type: 3}

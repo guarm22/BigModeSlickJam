@@ -23,6 +23,6 @@ public class DebugInfo : MonoBehaviour
     {
         currentPlayerSpeed.text = "Current Speed: " + moveScript.GetCurrentPlayerSpeed().ToString("F2");
         currentMaxSpeed.text = "Current Max Speed: "  + moveScript.GetCurrentMaxSpeed().ToString("F2");
-        currentSens.text = "Mouse Sens: " + camScript.sensX.ToString("F2");
+        currentSens.text = "Mouse Sens: " + camScript.sens.ToString("F2");
     }
 }

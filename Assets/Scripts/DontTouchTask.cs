@@ -10,7 +10,7 @@ public class DontTouchTask : Task {
         if(!completed) { return; }
         GameObject c = collision.gameObject;
         if(c.tag == "Player" || c.tag == "Ball" || c.tag == "Grabbable") {
-            completed = false;
+            FailTask();
             TaskManager.Instance.UpdateTasks(this);
         } 
     }

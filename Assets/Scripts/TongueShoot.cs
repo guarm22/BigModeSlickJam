@@ -28,13 +28,23 @@ public class TongueShoot : MonoBehaviour {
 
     private Vector3 playerHandPos;
 
-    void Awake()
-    {
+    private AudioSource audioSource;
+
+    [Header("Sounds")]
+    public AudioClip vacuumStart;
+    public AudioClip vacuumHold;
+    public AudioClip vacuumEnd;
+
+    void Awake() {
         mask = LayerMask.GetMask("Ground"); 
         cam = Camera.main.transform;
         elapsedTime = 0f;
         hitPoint = Vector3.zero;
         Instance = this;
+        audioSource = this.gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.loop = false;
+        audioSource.volume = 0.05f;
     }
 
     void CrosshairControl() {
@@ -64,13 +74,13 @@ public class TongueShoot : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        //FOR CROSSHAIR COLOR CHANGE
-        //adasda test
+        if(PlayerUI.instance.paused) {return;}
         CrosshairControl();
 
         if(Input.GetKeyUp(KeyCode.Mouse0) && grabbedObject != null) {
             grabbedObject.GetComponent<GrabbableObject>().LetGo();
             grabbedObject = null;
+            playVacuumEnd();
             return;
         }
 
@@ -79,7 +89,11 @@ public class TongueShoot : MonoBehaviour {
                 grabbedObject.GetComponent<GrabbableObject>().LetGo();
                 grabbedObject.GetComponent<GrabbableObject>().ShootAwayFromPlayer(player.transform.position);
                 grabbedObject = null;
+                playVacuumEnd();
                 return;
+            }
+            if(!audioSource.isPlaying) {
+                playVacuumHold();
             }
 
             playerHandPos = player.gameObject.GetComponentInParent<PlayerMovement>().handPosition;
@@ -89,7 +103,10 @@ public class TongueShoot : MonoBehaviour {
 
         if(Input.GetKeyDown(KeyCode.Mouse0) && canShoot) {
             canShoot = false;
+
             if(Physics.Raycast(cam.position, cam.forward, out RaycastHit hit, range, mask)) {
+                playVacuumStart();
+
                 if(hit.collider.GetComponent<GrabbableObject>() != null) {
                     grabbedObject = hit.collider.GetComponent<GrabbableObject>();
                     return;
@@ -107,11 +124,16 @@ public class TongueShoot : MonoBehaviour {
             if(grabbedObject != null) {
                 grabbedObject = null;
             }
+            if(hitPoint != Vector3.zero) {playVacuumEnd();}
+
             hitPoint = Vector3.zero;
         }
         //if we're still holding the mouse down, don't start cooldown
         //this is so we don't reset the cooldown while pulling
         if(Input.GetKey(KeyCode.Mouse0) && canShoot == false) {
+            if(!audioSource.isPlaying) {
+                playVacuumHold();
+            }
             return;
         }
 
@@ -121,5 +143,30 @@ public class TongueShoot : MonoBehaviour {
             canShoot = true;
             elapsedTime = 0f;
         }
+    }
+
+    private void randomizePitch() {
+        audioSource.pitch = Random.Range(0.9f, 1.1f);
+    }
+
+
+    private void playVacuumHold(){
+        audioSource.Stop();
+        audioSource.clip = vacuumHold;
+        audioSource.Play();
+    }
+
+    private void playVacuumStart(){
+        randomizePitch();
+        audioSource.Stop();
+        audioSource.clip = vacuumStart;
+        audioSource.Play();
+    }
+
+    private void playVacuumEnd(){
+        randomizePitch();
+        audioSource.Stop();
+        audioSource.clip = vacuumEnd;
+        audioSource.Play();
     }
 }

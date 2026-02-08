@@ -26,7 +26,7 @@ public class ObjectTask : Task {
     void Update() {
         if(objectsInArea.Count == requiredObjects.Count) {
             if(completed == false) {
-                completed = true;
+                CompleteTask();
                 TaskManager.Instance.UpdateTasks(this);
             }
         }
