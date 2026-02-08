@@ -21184,6 +21184,10 @@ PrefabInstance:
       propertyPath: sensY
       value: 350
       objectReference: {fileID: 0}
+    - target: {fileID: 8602094928388542132, guid: 28eb1fbaaf60d6d409309d41f07d1b6f, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8942584728617959867, guid: 28eb1fbaaf60d6d409309d41f07d1b6f, type: 3}
       propertyPath: m_Name
       value: AllPlayer

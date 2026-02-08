@@ -16,7 +16,7 @@ public class FP_CameraControl : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         Camera.main.fieldOfView = FOV;
-        sens = PlayerPrefs.GetFloat("Sens");
+        sens = PlayerPrefs.GetFloat("Sens", 400);
     }
 
     void Update() {
