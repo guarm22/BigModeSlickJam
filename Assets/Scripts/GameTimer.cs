@@ -14,7 +14,10 @@ public class GameTimer : MonoBehaviour{
     }
 
     private void EndGame() {
-        PlayerPrefs.SetFloat("HighScore", TaskManager.Instance.CalculateCompletionPercent());
+        float hs = PlayerPrefs.GetFloat("HighScore", TaskManager.Instance.CalculateCompletionPercent());
+        if(hs < TaskManager.Instance.CalculateCompletionPercent()) {PlayerPrefs.SetFloat("HighScore", TaskManager.Instance.CalculateCompletionPercent());}
+
+        PlayerUI.instance.EndGameScreen();
     }
 
     // Update is called once per frame
@@ -24,6 +27,7 @@ public class GameTimer : MonoBehaviour{
         timerText.text = currentTime.ToString("F1");
 
         if(currentTime <= 0) {
+            currentTime = 0f;
             EndGame();
         }
     }
